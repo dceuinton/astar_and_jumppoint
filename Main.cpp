@@ -333,13 +333,16 @@ void runSimulation(char *fileName){
 			 	          break;
 
                 case 1001:  //ENTER KEY
+                // printf("Hit ENTER\n");
+
 
                          //calc shortest path
+
 
                          break;  
 
 				case 1: //Block selected cell
-				 		
+
                         if( (rowSelected > 1) && (rowSelected < GRIDWORLD_ROWS) && (colSelected > 1) && (colSelected < GRIDWORLD_COLS)){
 							grid_world.setMapTypeValue(rowSelected-1, colSelected-1, '1');
 							grid_world.initialiseMapConnections(); 

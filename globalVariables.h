@@ -193,6 +193,18 @@ struct LpaStarCell
 	
 };
 
+// struct FinalDStarCell {
+// 	FinalDStarCell* move[DIRECTIONS];
+// 	double linkCost[DIRECTIONS];
+
+// 	double g;
+// 	double rhs;
+// 	double h;
+// 	double key[2];
+
+// 	char type;
+// };
+
 extern bool SHOW_MAP_DETAILS;
 
 /********************************************************************************************************************/

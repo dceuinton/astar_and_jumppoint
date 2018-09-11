@@ -1,5 +1,5 @@
-Main.exe		: 	Main.o  transform.o AstarSearch.o LPAstar.o dstar.o gridworld.o graphics.o 
-	g++ -o Main.exe Main.o transform.o AstarSearch.o LPAstar.o dstar.o gridworld.o graphics.o -l gdi32 
+Main.exe		: 	Main.o  transform.o AstarSearch.o LPAstar.o dstar.o gridworld.o graphics.o finaldstar.o
+	g++ -o Main.exe Main.o transform.o AstarSearch.o LPAstar.o dstar.o gridworld.o graphics.o finaldstar.o -l gdi32 
 			
 Main.o		:	Main.cpp graphics.h transform.h AstarSearch.h LPAstar.h dstar.h gridworld.h globalvariables.h
 	g++ -c -std=c++11 -O2    Main.cpp
@@ -15,6 +15,9 @@ LPAstar.o	:	 LPAstar.cpp LPAstar.h
 
 dstar.o	:	 dstar.cpp dstar.h
 	g++ -c -std=c++11 -O2    dstar.cpp
+
+finaldstar.o	: FinalDStar.cpp FinalDStar.h
+	g++ -c -std=c++11 -O2	FinalDStar.cpp
 
 gridworld.o	:	 gridworld.cpp gridworld.h
 	g++ -c -std=c++11 -O2    gridworld.cpp
