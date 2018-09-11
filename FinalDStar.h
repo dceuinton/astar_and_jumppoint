@@ -16,11 +16,16 @@ public:
 	FinalDStar(int rows, int cols, unsigned int theHeuristic);
 
 	void init(int startX, int startY, int goalX, int goalY);
-
-
-
-	double workOutH(int x, int y);
+	// calculateKeys
+	// updateVertex
+	// computeShortestPath
+	// main - so to speak	
+	
+	// My helper functions
 	void printMaze();
+
+	friend void copyMazeToDisplayMap(GridWorld &gWorld, FinalDStar *fDStar);
+	friend void copyDisplayMapToMaze(GridWorld &gWorld, FinalDStar *fDStar);
 
 private:
 	int rows, cols;
@@ -32,6 +37,8 @@ private:
 	unsigned int HEURISTIC = 0; 
 	Coordinates startCoord;
 	Coordinates goalCoord;
+
+	double calculateH(int x, int y);
 };
 
 #endif

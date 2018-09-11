@@ -19,7 +19,7 @@ void FinalDStar::init(int startX, int startY, int goalX, int goalY) {
 
 	for (int i = 0; i < rows; i++) {
 		for (int j = 0; j < cols; j++) {
-			maze[i][j].h = 0;
+			maze[i][j].h = calculateH(j, i);
 			maze[i][j].g   = INF;
 			maze[i][j].rhs = INF;
 			maze[i][j].key[0] = 0;
@@ -32,11 +32,13 @@ void FinalDStar::init(int startX, int startY, int goalX, int goalY) {
 	// Insert the goal vertex into the priority queue.
 }
 
-double FinalDStar::workOutH(int x, int y) {
+double FinalDStar::calculateH(int x, int y) {
 	if (HEURISTIC == MANHATTAN) {  
 		return max(abs(x - startCoord.x), abs(y - startCoord.y));
 	} else if (HEURISTIC == EUCLIDEAN) {
-		// int a = 
+		int a = abs(x - startCoord.x);
+		int b = abs(y - startCoord.y);
+		return sqrt(a * a + b * b);
 	} else {
 		printf("ERROR: Undefined heuristic function!\n");
 		exit(1);
@@ -55,4 +57,27 @@ void FinalDStar::printMaze() {
 		}
 	}
 
+}
+
+void copyDisplayMapToMaze(GridWorld &gWorld, FinalDStar* fDStar) {
+	for (int i = 0; i < rows; i++) {
+		for (int j = 0; j < cols; j++) {
+			fDStar->maze[i][j].type   = gWorld.map[i][j].type;
+			fDStar->maze[i][j].status = gWorld.map[i][j].status;
+		}
+	}
+}
+
+void copyMazeToDisplayMap(GridWorld) {
+	for (int i = 0; i < rows; i++) {
+		for (int j = 0; j < cols; j++) {
+			gWorld.map[i][j].h      = fDStar->maze[i][j].h;
+			gWorld.map[i][j].g      = fDStar->maze[i][j].g;
+			gWorld.map[i][j].rhs    = fDStar->maze[i][j].rhs;
+			gWorld.map[i][j].key[0] = fDStar->maze[i][j].key[0];
+			gWorld.map[i][j].key[1] = fDStar->maze[i][j].key[1];
+			gWorld.map[i][j].type   = fDStar->maze[i][j].type;
+			gWorld.map[i][j].status = fDStar->maze[i][j].status;
+		}
+	}	
 }
