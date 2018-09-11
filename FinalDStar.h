@@ -18,13 +18,14 @@ public:
 
 	void init(int startX, int startY, int goalX, int goalY);
 	void init(GridWorld &gWorld);
-	// calculateKeys
 	// updateVertex
+	void updateVertex(vertex &v);
 	// computeShortestPath
 	// main - so to speak	
 	
 	// My helper functions
 	void printMaze();
+	void printPQ();
 
 	friend void copyMazeToDisplayMap(GridWorld &gWorld, FinalDStar *fds);
 	friend void copyDisplayMapToMaze(GridWorld &gWorld, FinalDStar *fds);
@@ -32,9 +33,9 @@ public:
 private:
 	int rows, cols;
 	vector<vector<vertex>> maze;
-	priorityQueue mQ;
+	PriorityQueue mQ;
 
-	vertex* km;
+	double km;
 	vertex* k_old;
 
 	unsigned int HEURISTIC = 0; 
@@ -42,6 +43,19 @@ private:
 	Coordinates goalCoord;
 
 	double calculateH(int x, int y);
+	double calculateK2(vertex &v);
+	double calculateK1(vertex &v);
+	double* calculateKey(vertex &v);
+	void setKey(vertex &v);
+	bool isGoal(vertex &v);
+	bool notGoal(vertex &v);
+	bool notBlocked(vertex &v);
+	double cost(vertex &start, vertex &finish);
+	bool locallyConsistant(vertex &v);
+	void insertToQ(vertex &v);
+
+	double manhattan(int x1, int y1, int x2, int y2);
+	double euclidean(int x1, int y1, int x2, int y2);
 };
 
 #endif

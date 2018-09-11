@@ -44,6 +44,10 @@ void PriorityQueue::insert(vertex* v, double *k) {
 	push(v);
 }
 
+void PriorityQueue::insert(vertex* v) {
+	push(v);
+}
+
 void PriorityQueue::update(vertex* v, double *k) {
 	v->key[0] = k[0];
 	v->key[1] = k[1];
@@ -59,7 +63,13 @@ void PriorityQueue::remove(vertex *v) {
 	mHeap.erase(loc);
 }
 
-
+bool PriorityQueue::contains(vertex *v) {
+	if (find(mHeap.begin(), mHeap.end(), v) != mHeap.end()) {
+		return true;
+	} else {
+		return false;
+	}
+}
 
 
 

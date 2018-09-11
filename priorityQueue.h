@@ -19,10 +19,12 @@ public:
 	vertex* pop();
 	double* topKey();
 	void insert(vertex *v, double *k);
+	void insert(vertex *v);
 	void update(vertex *v, double *k);
 	void remove(vertex *v);
 
 	void printHeap();
+	bool contains(vertex *v);
 
 private:
 	vector<vertex*> mHeap;
