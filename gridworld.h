@@ -212,26 +212,26 @@ public:
 	
 private:
 	int cellWidth;
-   int cellHeight;
+    int cellHeight;
 
-   int GRIDWORLD_ROWS; 
-   int GRIDWORLD_COLS;
+    int GRIDWORLD_ROWS; 
+    int GRIDWORLD_COLS;
 
-   WorldBoundaryType worldBoundary;
-   DevBoundaryType deviceBoundary;
+    WorldBoundaryType worldBoundary;
+    DevBoundaryType deviceBoundary;
 
-   float WORLD_MAXX;
-   float WORLD_MAXY;
-   int fieldX1, fieldY1, fieldX2, fieldY2;
-	vector<vector<vertex> > map;
+    float WORLD_MAXX;
+    float WORLD_MAXY;
+    int fieldX1, fieldY1, fieldX2, fieldY2;
+	vector<vector<vertex>> map;
 
 	vertex startVertex;
 	vertex goalVertex;
-   bool MAP_INITIALISED;
-   int xInc;
+    bool MAP_INITIALISED;
+    int xInc;
 	int yInc;
 	
-   char fileName[25];
+    char fileName[25];
 	
 	vector<loc_t> shortestPath; //RL - shortest path
 };

@@ -126,7 +126,7 @@ void GridWorld::loadMapAndDisplay(const char* fn) //,int totalRows, int totalCol
 					map[j][i].key[1] = 0.0;
 					
 					for(int m=0; m < DIRECTIONS; m++){
-					   map[j][i].move[m] = NULL;  	
+						map[j][i].move[m] = NULL;  	
 						map[j][i].linkCost[m] = 1.0; 
 					}
 					

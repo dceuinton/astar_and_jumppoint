@@ -45,6 +45,7 @@
 #include "LPAstar.h"
 #include "dstar.h"
 #include "gridworld.h"
+#include "FinalDStar.h"
 
 
 // colour constants
@@ -260,7 +261,6 @@ int getKey(){
     if(GetAsyncKeyState(VK_RETURN) < 0) { //ENTER KEY
 		  return 1001;
     }
-
     
  }
  
@@ -306,6 +306,10 @@ void runSimulation(char *fileName){
 	//lpa_star->copyMazeToDisplayMap(grid_world);
 	//copyMazeToDisplayMap(grid_world, lpa_star);
 	copyDisplayMapToMaze(grid_world, lpa_star);
+
+	FinalDStar *mFinalDStar = new FinalDStar(grid_world.getGridWorldRows(), grid_world.getGridWorldCols(), HEURISTIC);
+	mFinalDStar->init(start.col, start.row, goal.col, goal.row);
+	mFinalDStar->printMaze();
 	//----------------------------------------------------------------
 		
 	worldBoundary = grid_world.getWorldBoundary();

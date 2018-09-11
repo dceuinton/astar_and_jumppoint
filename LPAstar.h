@@ -12,10 +12,10 @@ public:
     LpaStar(int rows, int cols); //constructor
 
     void initialise(int startX, int startY, int goalX, int goalY);
-	 double minValue(double g_, double rhs_);
+	double minValue(double g_, double rhs_);
     //double maxValue(double v1, double v2);
     int maxValue(int v1, int v2);
-	 void calcKey(int x, int y);
+	void calcKey(int x, int y);
     void calcKey(LpaStarCell *cell);
     //void calc_H(int x, int y);
     double calc_H(int x, int y);
