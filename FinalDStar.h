@@ -16,6 +16,7 @@ public:
 	FinalDStar(int rows, int cols, unsigned int theHeuristic);
 
 	void init(int startX, int startY, int goalX, int goalY);
+	void init(GridWorld &gWorld);
 	// calculateKeys
 	// updateVertex
 	// computeShortestPath
@@ -24,8 +25,8 @@ public:
 	// My helper functions
 	void printMaze();
 
-	friend void copyMazeToDisplayMap(GridWorld &gWorld, FinalDStar *fDStar);
-	friend void copyDisplayMapToMaze(GridWorld &gWorld, FinalDStar *fDStar);
+	friend void copyMazeToDisplayMap(GridWorld &gWorld, FinalDStar *fds);
+	friend void copyDisplayMapToMaze(GridWorld &gWorld, FinalDStar *fds);
 
 private:
 	int rows, cols;

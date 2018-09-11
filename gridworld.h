@@ -23,6 +23,7 @@
 #include "graphics.h"
 #include "LpaStar.h"
 
+class FinalDStar;
 
 class GridWorld{
 
@@ -209,7 +210,11 @@ public:
 	// friend functions
 	friend void copyMazeToDisplayMap(GridWorld &gWorld, LpaStar* lpa);
 	friend void copyDisplayMapToMaze(GridWorld &gWorld, LpaStar* lpa);
-	
+
+	// friend functions
+	friend void copyMazeToDisplayMap(GridWorld &gWorld, FinalDStar* fds);
+	friend void copyDisplayMapToMaze(GridWorld &gWorld, FinalDStar* fds);
+
 private:
 	int cellWidth;
     int cellHeight;

@@ -308,7 +308,8 @@ void runSimulation(char *fileName){
 	copyDisplayMapToMaze(grid_world, lpa_star);
 
 	FinalDStar *mFinalDStar = new FinalDStar(grid_world.getGridWorldRows(), grid_world.getGridWorldCols(), HEURISTIC);
-	mFinalDStar->init(start.col, start.row, goal.col, goal.row);
+	// mFinalDStar->init(start.col, start.row, goal.col, goal.row);
+	mFinalDStar->init(grid_world);
 	mFinalDStar->printMaze();
 	//----------------------------------------------------------------
 		
