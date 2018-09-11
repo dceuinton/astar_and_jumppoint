@@ -38,6 +38,27 @@ double* PriorityQueue::topKey() {
 	}
 }
 
+void PriorityQueue::insert(vertex* v, double *k) {
+	v->key = k;
+	push(v);
+}
+
+void PriorityQueue::update(vertex* v, double *k) {
+	v->key = k;
+}
+
+void PriorityQueue::remove(vertex *v) {
+	for (vector<vertex*>::iterator it = mHeap.begin(); it != mHeap.end(); ++it) {
+		*it.print();
+	}
+}
+
+
+
+
+
+
+
 // ------------------------------------------------------------
 // Helpers 
 // ------------------------------------------------------------

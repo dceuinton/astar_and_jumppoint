@@ -349,8 +349,11 @@ void runSimulation(char *fileName){
 	verts[1]->key[1] = 2;
 	verts[4]->key[1] = 2;
 
+	double myKey[2] = {5, 5};
+
 	for (int i = 0; i < 5; i++) {
-		qu.push(verts[i]);
+		// qu.push(verts[i]);
+		qu.insert(verts[i], myKey);
 	}
 
 	qu.printHeap();

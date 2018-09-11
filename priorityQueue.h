@@ -18,9 +18,9 @@ public:
 	void push(vertex *v);
 	vertex* pop();
 	double* topKey();
-	// void insert(vertex &v, double *key);
-	// void update(vertex &v, double *key);
-	// void remove(vertex &v);
+	void insert(vertex *v, double *k);
+	void update(vertex *v, double *k);
+	void remove(vertex *v);
 
 	void printHeap();
 
