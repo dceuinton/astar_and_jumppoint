@@ -315,9 +315,13 @@ void runSimulation(char *fileName){
 
 	PriorityQueue qu; 
 	qu.printHeap();
-	double *val = qu.topKey();
-	printf("Top Key: [%.1f, %.1f]\n", val[0], val[1]);
-	delete[] val;
+	// vertex *val1 = qu.pop();
+	// if (val1 == nullptr) {
+	// 	printf("TRUE\n");
+	// }
+	// double *val = qu.topKey();
+	// printf("Top Key: [%.1f, %.1f]\n", val[0], val[1]);
+	// delete[] val;
 	// val = NULL;
 
 	vector<vertex*> verts;
@@ -336,14 +340,14 @@ void runSimulation(char *fileName){
 		v->rhs=0;
 		v->type='0';
 		v->status='0';
-		v->key[0]= 0;
+		v->key[0]= i;
 		v->key[1]= 0;
 		v->print();
 		// verts.push_back(a);
 	}
 
-	// verts[1]->key[1] = 2;
-	// verts[4]->key[1] = 2;
+	verts[1]->key[1] = 2;
+	verts[4]->key[1] = 2;
 
 	for (int i = 0; i < 5; i++) {
 		qu.push(verts[i]);
@@ -351,9 +355,15 @@ void runSimulation(char *fileName){
 
 	qu.printHeap();
 
-	val = qu.topKey();
-	printf("Top Key: [%.1f, %.1f]\n", val[0], val[1]);
-	delete[] val;
+	// vertex *val = qu.pop();
+	// printf("Popped:\n");
+	// val->print();
+
+	// qu.printHeap();
+
+	// val = qu.topKey();
+	// printf("Top Key: [%.1f, %.1f]\n", val[0], val[1]);
+	// delete[] val;
 	// val = NULL;
 
 	

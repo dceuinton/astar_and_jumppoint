@@ -9,6 +9,9 @@ void PriorityQueue::clearQueue() {
 	mHeap = {};
 }
 
+/* ISSUE: If I push all values of the same it alternates between pushing
+		  in front and behind the first value added. Not sure why. Need 
+		  to fix it. But for now moving on. */
 void PriorityQueue::push(vertex *v) {
 	mHeap.push_back(v);
 	push_heap(mHeap.begin(), mHeap.end(), keyComparison);
