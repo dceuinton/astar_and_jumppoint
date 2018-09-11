@@ -62,11 +62,19 @@ double FinalDStar::calculateH(int x, int y) {
 
 void FinalDStar::printMaze() {
 
+	// for (int i = 0; i < rows; i++) {
+	// 	for (int j = 0; j < cols; j++) {
+	// 		vertex v = maze[i][j];
+	// 		printf("(%d, %d), t = %u, h = %.1f, g = %.1f, rhs = %.1f, key = [%.1f, %.1f] \n", 
+	// 			i, j, v.type, v.h, v.g, v.rhs, v.key[0], v.key[1]);
+	// 	}
+	// }
+
 	for (int i = 0; i < rows; i++) {
 		for (int j = 0; j < cols; j++) {
 			vertex v = maze[i][j];
-			printf("(%d, %d), t = %u, h = %.1f, g = %.1f, rhs = %.1f, key = [%.1f, %.1f] \n", 
-				i, j, v.type, v.h, v.g, v.rhs, v.key[0], v.key[1]);
+			// printNode(v);
+			v.print();
 		}
 	}
 

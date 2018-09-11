@@ -1,5 +1,5 @@
-Main.exe		: 	Main.o  transform.o AstarSearch.o LPAstar.o dstar.o gridworld.o graphics.o finaldstar.o
-	g++ -o Main.exe Main.o transform.o AstarSearch.o LPAstar.o dstar.o gridworld.o graphics.o finaldstar.o -l gdi32 
+Main.exe		: 	Main.o  transform.o AstarSearch.o LPAstar.o dstar.o gridworld.o graphics.o finaldstar.o priorityQueue.o
+	g++ -o Main.exe Main.o transform.o AstarSearch.o LPAstar.o dstar.o gridworld.o graphics.o finaldstar.o priorityQueue.o -l gdi32 
 			
 Main.o		:	Main.cpp graphics.h transform.h AstarSearch.h LPAstar.h dstar.h gridworld.h globalvariables.h
 	g++ -c -std=c++11 -O2    Main.cpp
@@ -24,6 +24,10 @@ gridworld.o	:	 gridworld.cpp gridworld.h
 
 graphics.o		:	 graphics.cpp graphics.h
 	g++ -c -std=c++11 -O2    graphics.cpp
+
+priorityQueue.o:	priorityQueue.cpp priorityQueue.h
+	g++ -c -std=c++11 -O2	priorityQueue.cpp
+
 	
 clean:
 	del *.o

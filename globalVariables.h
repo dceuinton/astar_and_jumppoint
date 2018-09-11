@@ -142,6 +142,11 @@ struct vertex
 	 
 	int x1,y1,x2,y2;
 	Coordinates centre; //centre x, centre y
+
+	void print() {
+		printf("(%d, %d), t = %u, s=%d, h = %.1f, g = %.1f, rhs = %.1f, key = [%.1f, %.1f] \n", 
+				col, row, type, status, h, g, rhs, key[0], key[1]);
+	}
 }; 
 
 extern int MAX_MOVES;
@@ -149,8 +154,6 @@ extern int MAX_MOVES;
 extern vector<vector<vertex> > map;
 extern vertex startVertex;
 extern vertex goalVertex;
-
-
 
 typedef struct vector<CellPosition> PathType;
 

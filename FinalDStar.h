@@ -8,6 +8,7 @@
 
 #include "gridworld.h"
 #include "globalVariables.h"
+#include "priorityQueue.h"
 
 // class GridWorld; // Forward declaration
 

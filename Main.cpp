@@ -312,6 +312,54 @@ void runSimulation(char *fileName){
 	mFinalDStar->init(grid_world);
 	mFinalDStar->printMaze();
 	//----------------------------------------------------------------
+
+	PriorityQueue qu; 
+	qu.printHeap();
+	double *val = qu.topKey();
+	printf("Top Key: [%.1f, %.1f]\n", val[0], val[1]);
+	delete[] val;
+	// val = NULL;
+
+	vector<vertex*> verts;
+	vertex a, b, c, d, e;
+	verts.push_back(&a);
+	verts.push_back(&b);
+	verts.push_back(&c);
+	verts.push_back(&d);
+	verts.push_back(&e);
+	for (int i = 0; i < 5; i++) {
+		vertex *v = verts[i];
+		v->row=i;
+		v->col=i;
+		v->h=0;
+		v->g=0;
+		v->rhs=0;
+		v->type='0';
+		v->status='0';
+		v->key[0]= 0;
+		v->key[1]= 0;
+		v->print();
+		// verts.push_back(a);
+	}
+
+	// verts[1]->key[1] = 2;
+	// verts[4]->key[1] = 2;
+
+	for (int i = 0; i < 5; i++) {
+		qu.push(verts[i]);
+	}
+
+	qu.printHeap();
+
+	val = qu.topKey();
+	printf("Top Key: [%.1f, %.1f]\n", val[0], val[1]);
+	delete[] val;
+	// val = NULL;
+
+	
+	
+
+
 		
 	worldBoundary = grid_world.getWorldBoundary();
 	deviceBoundary = grid_world.getDeviceBoundary();
