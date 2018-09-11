@@ -350,11 +350,20 @@ void runSimulation(char *fileName){
 	verts[4]->key[1] = 2;
 
 	double myKey[2] = {5, 5};
+	double myKey1[2] = {0, 2};
 
-	for (int i = 0; i < 5; i++) {
+	for (int i = 0; i < 4; i++) {
 		// qu.push(verts[i]);
 		qu.insert(verts[i], myKey);
 	}
+
+	qu.insert(verts[4], myKey1);
+
+	qu.remove(verts[4]);
+
+	qu.printHeap();
+
+	qu.clear();
 
 	qu.printHeap();
 

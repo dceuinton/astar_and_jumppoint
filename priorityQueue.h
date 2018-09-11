@@ -14,7 +14,7 @@ class PriorityQueue {
 public:
 	PriorityQueue();
 
-	void clearQueue();
+	void clear();
 	void push(vertex *v);
 	vertex* pop();
 	double* topKey();

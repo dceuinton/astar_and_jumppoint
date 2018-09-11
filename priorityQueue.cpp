@@ -5,7 +5,7 @@ PriorityQueue::PriorityQueue() {
 	make_heap(mHeap.begin(), mHeap.end(), keyComparison);
 }
 
-void PriorityQueue::clearQueue() {
+void PriorityQueue::clear() {
 	mHeap = {};
 }
 
@@ -39,18 +39,24 @@ double* PriorityQueue::topKey() {
 }
 
 void PriorityQueue::insert(vertex* v, double *k) {
-	v->key = k;
+	v->key[0] = k[0];
+	v->key[1] = k[1];
 	push(v);
 }
 
 void PriorityQueue::update(vertex* v, double *k) {
-	v->key = k;
+	v->key[0] = k[0];
+	v->key[1] = k[1];
 }
 
 void PriorityQueue::remove(vertex *v) {
+	vector<vertex*>::iterator loc;
 	for (vector<vertex*>::iterator it = mHeap.begin(); it != mHeap.end(); ++it) {
-		*it.print();
+		if (*it == v) {
+			loc = it;
+		}
 	}
+	mHeap.erase(loc);
 }
 
 
