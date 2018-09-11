@@ -32,6 +32,7 @@ public:
 private:
 	int rows, cols;
 	vector<vector<vertex>> maze;
+	priorityQueue mQ;
 
 	vertex* km;
 	vertex* k_old;

@@ -1,2 +1,3 @@
 @echo off 
-main grid_Dstar_journal.txt manhattan
+rem main grid_Dstar_journal.txt manhattan
+main grid_Dstar_my_test.txt manhattan

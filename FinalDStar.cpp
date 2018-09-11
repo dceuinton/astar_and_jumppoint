@@ -13,6 +13,7 @@ FinalDStar::FinalDStar(int rs, int cs, unsigned int theHeuristic) {
 void FinalDStar::init(int startX, int startY, int goalX, int goalY) {
 	printf("init(Coordinates)\n");
 	// Do the priority queue init
+	mQ.clear();
 	km = 0;
 
 	startCoord.x = startX; startCoord.y = startY;
@@ -30,9 +31,9 @@ void FinalDStar::init(int startX, int startY, int goalX, int goalY) {
 		}
 	}
 
-	maze[goalX][goalY].rhs = 0;
-
-	// Insert the goal vertex into the priority queue.
+	maze[goalY][goalX].rhs = 0;
+	double key[2] = {};
+	mQ.insert(maze[goalY][goalX], key);
 }
 
 void FinalDStar::init(GridWorld &gWorld) {
