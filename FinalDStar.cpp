@@ -25,7 +25,7 @@ FinalDStar::FinalDStar(int rs, int cs, unsigned int theHeuristic) {
 }
 
 void FinalDStar::init(int startX, int startY, int goalX, int goalY) {
-	printf("init(Coordinates)\n");
+	debug("init(Coordinates)");
 	// Do the priority queue init
 	mQ.clear();
 	km = 0;
@@ -50,7 +50,7 @@ void FinalDStar::init(int startX, int startY, int goalX, int goalY) {
 }
 
 void FinalDStar::init(GridWorld &gWorld) {
-	printf("init(gWorld)\n");
+	debug("init(gWorld)");
 	for (int i = 0; i < rows; i++) {
 		for (int j = 0; j < cols; j++) {
 			maze[i][j].type = 1;
@@ -60,8 +60,8 @@ void FinalDStar::init(GridWorld &gWorld) {
 }
 
 void FinalDStar::updateVertex(vertex &v) {
-	debug("UPDATING VERTEX");
-	v.print();
+	// debug("UPDATING VERTEX");
+	// v.print();
 	double newRHS = INF;
 	if (notGoal(v)) {
 		for (int i = 0; i < DIRECTIONS; i++) {
@@ -92,41 +92,6 @@ void FinalDStar::updateVertex(vertex &v) {
 }
 
 void FinalDStar::computeShortestPath() {
-	// while (compareKeys(mQ.getTopKey(), calculateStartKey()) || !locallyConsistant(maze[startCoord.y][startCoord.x])) {
-	// 	double *tKey = mQ.getTopKey();
-	// 	k_old[0] = tKey[0];
-	// 	k_old[1] = tKey[1];
-	// 	vertex u = *(mQ.pop());
-
-	// 	double uKey[2];
-	// 	calcKey(u, uKey);
-
-	// 	if (compareKeys(k_old, &uKey[0])) {
-	// 		mQ.insert(&u, &uKey[0]);
-	// 	} else if (u.g > u.rhs) {
-	// 		u.g = u.rhs;
-	// 		for (int i = 0; i < DIRECTIONS; i++) {
-	// 			int x = u.col + neighbours[i].x;
-	// 			int y = u.row + neighbours[i].y;
-	// 			updateVertex(maze[y][x]);
-	// 		}
-	// 	} else {
-	// 		u.g = INF;
-	// 		updateVertex(u);
-	// 		for (int i = 0; i < DIRECTIONS + 1; i++) {
-	// 			int x = u.col + allNine[i].x;
-	// 			int y = u.row + allNine[i].y;
-	// 			updateVertex(maze[y][x]);
-	// 		}
-	// 	}
-	// }
-
-	// // My checks --------------------------------------------------
-	// double *k1 = mQ.getTopKey();
-	// double *k2 = calculateStartKey();
-	// debug("comparing [%f, %f] with [%f, %f]", k1[0], k1[1], k2[0], k2[1]);
-	// debug("!locallyConsistent? %d, %f, %f", !locallyConsistant(maze[startCoord.y][startCoord.x]), maze[startCoord.y][startCoord.x].g, maze[startCoord.y][startCoord.x].rhs);
-
 	while (compareKeys(mQ.getTopKey(), calculateStartKey()) || !locallyConsistant(maze[startCoord.y][startCoord.x])) {
 		double *tKey = mQ.getTopKey();
 		k_old[0] = tKey[0];
@@ -135,20 +100,16 @@ void FinalDStar::computeShortestPath() {
 
 		double uKey[2];
 		calcKey(*u, uKey);
-		// debug("k_old [%f, %f]", k_old[0], k_old[1]);
-		// debug("uKey [%f, %f]", uKey[0], uKey[1]);
-
+		
 		if (compareKeys(k_old, &uKey[0])) {
 			mQ.insert(u, &uKey[0]);
 		} else if (u->g > u->rhs) {
-			// debug("TRUE g=%f rhs=%f", u->g, u->rhs);
 			u->g = u->rhs;
-			debug("VERTEX");
-			u->print();
+			// debug("VERTEX");
+			// u->print();
 			for (int i = 0; i < DIRECTIONS; i++) {
 				int x = u->col + neighbours[i].x;
 				int y = u->row + neighbours[i].y;
-				// debug("Next vertex to be updated (%d, %d)", x, y);
 				if (notBlocked(maze[y][x])) {
 					updateVertex(maze[y][x]);	
 				}				
@@ -165,8 +126,47 @@ void FinalDStar::computeShortestPath() {
 		}
 	}
 
-	// debug("maze[6][2] t=%d, notBlocked=%d", maze[6][2].type, notBlocked(maze[6][2]));
-	debug("Goal? maze[5][3] %d, notgoal %d", isGoal(maze[5][3]), notGoal(maze[5][3]));
+	printMaze();
+	// // debug("maze[6][2] t=%d, notBlocked=%d", maze[6][2].type, notBlocked(maze[6][2]));
+	// debug("Goal? maze[5][3] %d, notgoal %d", isGoal(maze[5][3]), notGoal(maze[5][3]));
+}
+
+void FinalDStar::search(GridWorld &gWorld) {
+	init(gWorld);
+	s_start = getStartVertex();
+
+	debug("s_start");
+	s_start->print();
+
+	s_last = getStartVertex();
+	computeShortestPath();
+
+	while (notGoal(*s_start)) {
+		int lowest_cost = INF;
+		vertex* next = s_start;
+		for (int i = 0; i < DIRECTIONS; i++) {
+			int x = s_start->col + neighbours[i].x;
+			int y = s_start->row + neighbours[i].y;
+			if (notBlocked(maze[y][x])) {
+				double m_cost = cost(*s_start, maze[y][x]) + maze[y][x].g;
+				// debug("Checking (%d, %d) m_cost = %f", x, y, m_cost);
+				if (m_cost < lowest_cost) {
+					// debug("This is lower (%d, %d) m_cost = %f", x, y, m_cost);
+					lowest_cost = m_cost;
+					next = &maze[y][x];
+					// next->print();
+				}
+			}
+		}
+		s_start = next;
+		// debug("start");
+		// s_start->print();
+	}
+	
+
+
+	debug("s_start");
+	s_start->print();
 }
 
 double FinalDStar::calculateH(int x, int y) {
@@ -332,6 +332,8 @@ void FinalDStar::printPQ() {
 }
 
 void copyDisplayMapToMaze(GridWorld &gWorld, FinalDStar* fds) {
+	// printf("copyDisplayMapToMaze\n");
+
 	bool initialize = false;
 	for (int i = 0; i < fds->rows; i++) {
 		for (int j = 0; j < fds->cols; j++) {

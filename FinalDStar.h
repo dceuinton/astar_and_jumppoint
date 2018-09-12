@@ -21,7 +21,7 @@ public:
 	// updateVertex
 	void updateVertex(vertex &v);
 	void computeShortestPath();
-	// main - so to speak	
+	void search(GridWorld &gWorld);
 	
 	// My helper functions
 	vertex* getVertex(int x, int y);
@@ -46,8 +46,8 @@ private:
 	unsigned int HEURISTIC = 0; 
 	Coordinates startCoord;
 	Coordinates goalCoord;
-	// vertex* start;
-	// vertex* goal;
+	vertex* s_last;
+	vertex* s_start;
 
 	double calculateH(int x, int y);
 	double calculateK2(vertex &v);

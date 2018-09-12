@@ -309,18 +309,19 @@ void runSimulation(char *fileName){
 
 	FinalDStar *mFinalDStar = new FinalDStar(grid_world.getGridWorldRows(), grid_world.getGridWorldCols(), HEURISTIC);
 	// mFinalDStar->init(start.col, start.row, goal.col, goal.row);
-	mFinalDStar->init(grid_world);
+	// mFinalDStar->init(grid_world);
 	// mFinalDStar->printMaze();
 	// mFinalDStar->printPQ();
 	// mFinalDStar->updateVertex(*(mFinalDStar->getVertex(goal.col - 1, goal.row - 1)));
-	mFinalDStar->printPQ();
+	// mFinalDStar->printPQ();
 	// int iterations = 4;
 	// for (int i = 0; i < iterations; i++) {
 	// 	mFinalDStar->computeShortestPath();	
 	// }	
-	mFinalDStar->computeShortestPath();
-	mFinalDStar->printMaze();
-	mFinalDStar->printPQ();
+	// mFinalDStar->computeShortestPath();
+	mFinalDStar->search(grid_world);
+	// mFinalDStar->printMaze();
+	// mFinalDStar->printPQ();
 
 	
 	//----------------------------------------------------------------
