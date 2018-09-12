@@ -311,8 +311,11 @@ void runSimulation(char *fileName){
 	// mFinalDStar->init(start.col, start.row, goal.col, goal.row);
 	mFinalDStar->init(grid_world);
 	mFinalDStar->printMaze();
+	// mFinalDStar->printPQ();
+	mFinalDStar->updateVertex(*(mFinalDStar->getVertex(goal.col - 1, goal.row - 1)));
+	mFinalDStar->printMaze();
 
-	mFinalDStar->printPQ();
+	
 	//----------------------------------------------------------------
 
 	// PriorityQueue qu; 

@@ -38,6 +38,17 @@ double* PriorityQueue::topKey() {
 	}
 }
 
+double* PriorityQueue::getTopKey() {
+	if (!mHeap.empty()) {
+		mTopKey[0] = mHeap.front()->key[0];
+		mTopKey[1] = mHeap.front()->key[1];
+	} else {
+		mTopKey[0] = INF;
+		mTopKey[1] = INF;
+	}
+	return mTopKey;
+}
+
 void PriorityQueue::insert(vertex* v, double *k) {
 	v->key[0] = k[0];
 	v->key[1] = k[1];

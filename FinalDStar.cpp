@@ -1,5 +1,19 @@
 #include "FinalDStar.h"
 
+#define DEBUG
+
+void FinalDStar::debug(const char *format, ...) {
+	#ifdef DEBUG 
+	va_list args;
+	va_start(args, format);
+	vfprintf(stdout, "FINALDSTAR DEBUG :: ", nullptr);
+	vfprintf(stdout, format, args);
+	vfprintf(stdout, "\n", nullptr);
+	va_end(args);
+	fflush(stdout);
+	#endif
+}
+
 FinalDStar::FinalDStar(int rs, int cs, unsigned int theHeuristic) {
 	rows = rs; cols = cs;
 	HEURISTIC = theHeuristic;
@@ -46,19 +60,25 @@ void FinalDStar::init(GridWorld &gWorld) {
 }
 
 void FinalDStar::updateVertex(vertex &v) {
+	debug("updateVertex()");
 	double newRHS = INF;
 	if (!isGoal(v)) {
 		for (int i = 0; i < DIRECTIONS; i++) {
 			int x = v.col + neighbours[i].x;
 			int y = v.row + neighbours[i].y;
+			debug("The type of maze[%d][%d] is: %d", y, x, maze[y][x].type);
 			if (notBlocked(maze[y][x])) {
+				debug("vertex(%d, %d) gets here", x, y);
 				double rhs = maze[y][x].g + cost(v, maze[y][x]);
+				debug("rhs = %f", rhs);
 				if (rhs < newRHS) {
 					newRHS = rhs;
 				}
 			}
 		}
 	}
+	// v.rhs = newRHS;
+	debug("newRHS = %f", newRHS);
 
 	if (mQ.contains(&v)) {
 		mQ.remove(&v);
@@ -68,6 +88,37 @@ void FinalDStar::updateVertex(vertex &v) {
 		insertToQ(v);
 	}
 }
+
+// void FinalDStar::computeShortestPath() {
+// 	while (compareKeys(mQ.getTopKey(), calculateStartKey()) || !locallyConsistant(maze[startCoord.y][startCoord.x])) {
+// 		double *tKey = mQ.getTopKey();
+// 		k_old[0] = tKey[0];
+// 		k_old[1] = tKey[1];
+// 		vertex u = *(mQ.pop());
+
+// 		double uKey[2];
+// 		calcKey(u, uKey);
+
+// 		if (compareKeys(k_old, uKey)) {
+// 			mQ.insert(&u, uKey);
+// 		} else if (u.g > u.rhs) {
+// 			u.g = u.rhs;
+// 			for (int i = 0; i < DIRECTIONS; i++) {
+// 				int x = u.col + neighbours[i].x;
+// 				int y = u.row + neighbours[i].y;
+// 				updateVertex(maze[y][x]);
+// 			}
+// 		} else {
+// 			u.g = INF;
+// 			updateVertex(u);
+// 			for (int i = 0; i < DIRECTIONS + 1; i++) {
+// 				int x = u.col + allNine[i].x;
+// 				int y = u.row + allNine[i].y;
+// 				updateVertex(maze[y][x]);
+// 			}
+// 		}
+// 	}
+// }
 
 double FinalDStar::calculateH(int x, int y) {
 	if (HEURISTIC == MANHATTAN) {  
@@ -80,6 +131,40 @@ double FinalDStar::calculateH(int x, int y) {
 	}
 
 	return 0.0;
+}
+
+double* FinalDStar::calculateStartKey() {
+	vertex *start = getStartVertex();
+	calcKey(*start, mStartKey);
+	return mStartKey;
+}
+
+vertex* FinalDStar::getVertex(int x, int y) {
+	return &maze[y][x];
+}
+
+vertex* FinalDStar::getStartVertex() {
+	vertex *startVertex;
+	for (int i = 0; i < rows; i++) {
+		for (int j = 0; j < cols; j++) {
+			if (isStart(maze[i][j])) {
+				startVertex = &maze[i][j];
+			}
+		}
+	}
+	return startVertex;
+}
+
+vertex* FinalDStar::getGoalVertex() {
+	vertex *goalVertex;
+	for (int i = 0; i < rows; i++) {
+		for (int j = 0; j < cols; j++) {
+			if (isGoal(maze[i][j])) {
+				goalVertex = &maze[i][j];
+			}
+		}
+	}
+	return goalVertex;
 }
 
 double FinalDStar::calculateK2(vertex &v) {
@@ -100,9 +185,28 @@ double* FinalDStar::calculateKey(vertex &v) {
 	return keys;
 }
 
+void FinalDStar::calcKey(vertex &v, double *container) {
+	container[0] = calculateK1(v);
+	container[1] = calculateK2(v);
+}
+
 void FinalDStar::setKey(vertex &v) {
 	v.key[0] = calculateK1(v);
 	v.key[1] = calculateK2(v);
+}
+
+bool FinalDStar::compareKeys(double* lhs, double* rhs) {
+	if (lhs[0] < rhs[0]) {
+		return true;
+	} else if (lhs[0] > rhs[0]) {
+		return false;
+	} else {
+		if (lhs[1] <= rhs[1]) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 }
 
 bool FinalDStar::isGoal(vertex &v) {
@@ -114,6 +218,13 @@ bool FinalDStar::isGoal(vertex &v) {
 
 bool FinalDStar::notGoal(vertex &v) {
 	return !isGoal(v);
+}
+
+bool FinalDStar::isStart(vertex &v) {
+	if (v.type == '6' || v.type == 54) {
+		return true;
+	}
+	return false;
 }
 
 bool FinalDStar::notBlocked(vertex &v) {
@@ -158,6 +269,7 @@ double FinalDStar::euclidean(int x1, int y1, int x2, int y2) {
 }
 
 void FinalDStar::printMaze() {
+	printf("FinalDStar Maze: \n");
 	for (int i = 0; i < rows; i++) {
 		for (int j = 0; j < cols; j++) {
 			vertex v = maze[i][j];

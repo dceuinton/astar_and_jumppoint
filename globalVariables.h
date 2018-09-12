@@ -64,6 +64,13 @@ const double SQRT_2 =  1.4142135623731;
 	} neighbours[8]={ {-1,-1}, {0, -1}, {1, -1}, 
 					{-1, 0}, {1, 0}, 
 					{-1, 1}, {0, 1}, {1, 1} };
+
+	const struct {
+		int x;
+		int y;
+	} allNine[9]={ {-1,-1}, {0, -1}, {1, -1}, 
+					{-1, 0}, {0, 0}, {1, 0}, 
+					{-1, 1}, {0, 1}, {1, 1} };
 			
 	//clockwise, starting at 3 o'clock			
 	//~ const struct {
