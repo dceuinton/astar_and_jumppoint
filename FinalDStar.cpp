@@ -98,7 +98,7 @@ void FinalDStar::updateVertex(vertex &v) {
 	}
 }
 
-void FinalDStar::computeShortestPath() {
+bool FinalDStar::computeShortestPath() {
 	while (compareKeys(mQ.getTopKey(), calculateStartKey()) || !locallyConsistant(maze[startCoord.y][startCoord.x])) {
 		double *tKey = mQ.getTopKey();
 		k_old[0] = tKey[0];
@@ -119,7 +119,8 @@ void FinalDStar::computeShortestPath() {
 				int y = u->row + neighbours[i].y;
 				if (notBlocked(maze[y][x])) {
 					updateVertex(maze[y][x]);	
-				}				
+					// u->linkCost[i] = cost(*u, maze[y][x]);
+				} 				
 			}
 		} else {
 			u->g = INF;
@@ -133,6 +134,7 @@ void FinalDStar::computeShortestPath() {
 		}
 	}
 
+	return true;
 	// printMaze();
 	// printPQ();
 	// // debug("maze[6][2] t=%d, notBlocked=%d", maze[6][2].type, notBlocked(maze[6][2]));
@@ -410,16 +412,3 @@ void copyDisplayMapToMaze(GridWorld &gWorld, FinalDStar* fds) {
 	}
 }
 
-void copyMazeToDisplayMap(GridWorld &gWorld, FinalDStar* fds) {
-	for (int i = 0; i < fds->rows; i++) {
-		for (int j = 0; j < fds->cols; j++) {
-			gWorld.map[i][j].h      = fds->maze[i][j].h;
-			gWorld.map[i][j].g      = fds->maze[i][j].g;
-			gWorld.map[i][j].rhs    = fds->maze[i][j].rhs;
-			gWorld.map[i][j].key[0] = fds->maze[i][j].key[0];
-			gWorld.map[i][j].key[1] = fds->maze[i][j].key[1];
-			gWorld.map[i][j].type   = fds->maze[i][j].type;
-			gWorld.map[i][j].status = fds->maze[i][j].status;
-		}
-	}	
-}

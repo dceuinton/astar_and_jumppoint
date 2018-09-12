@@ -142,6 +142,22 @@ void copyDisplayMapToMaze(GridWorld &gWorld, LpaStar* lpa){
 	
 }
 
+void copyMazeToDisplayMap(GridWorld &gWorld, FinalDStar* fds) {
+	printf("Inside copy to display map\n");
+	for (int i = 0; i < fds->rows; i++) {
+		for (int j = 0; j < fds->cols; j++) {
+			// printf("at vertex (%d, %d))\n", j, i);
+			gWorld.map[i][j].h      = fds->maze[i][j].h;
+			gWorld.map[i][j].g      = fds->maze[i][j].g;
+			gWorld.map[i][j].rhs    = fds->maze[i][j].rhs;
+			gWorld.map[i][j].key[0] = fds->maze[i][j].key[0];
+			gWorld.map[i][j].key[1] = fds->maze[i][j].key[1];
+			gWorld.map[i][j].type   = fds->maze[i][j].type;
+			gWorld.map[i][j].status = fds->maze[i][j].status;
+		}
+	}	
+}
+
 
 ///////////////////////////////////////////////////////////////////////////////
 // FUNCTION PROTOTYPES
@@ -308,92 +324,22 @@ void runSimulation(char *fileName){
 	copyDisplayMapToMaze(grid_world, lpa_star);
 
 	FinalDStar *mFinalDStar = new FinalDStar(grid_world.getGridWorldRows(), grid_world.getGridWorldCols(), HEURISTIC);
-	// mFinalDStar->init(start.col, start.row, goal.col, goal.row);
-	// mFinalDStar->init(grid_world);
-	// mFinalDStar->printMaze();
-	// mFinalDStar->printPQ();
-	// mFinalDStar->updateVertex(*(mFinalDStar->getVertex(goal.col - 1, goal.row - 1)));
-	// mFinalDStar->printPQ();
-	// int iterations = 4;
-	// for (int i = 0; i < iterations; i++) {
-	// 	mFinalDStar->computeShortestPath();	
-	// }	
-	// mFinalDStar->computeShortestPath();
-	mFinalDStar->search(grid_world);
-	// mFinalDStar->printMaze();
-	// mFinalDStar->printPQ();
+	
+	bool found = false;
+
+
+	mFinalDStar->init(grid_world);
+	found = mFinalDStar->computeShortestPath();
+
+	printf("Found? %d\n", found);
+
+	if (found) {
+		copyMazeToDisplayMap(grid_world, mFinalDStar);
+		grid_world.displayPath();
+	}
+	// mFinalDStar->search(grid_world);
 
 	
-	//----------------------------------------------------------------
-
-	// PriorityQueue qu; 
-	// qu.printHeap();
-	// // vertex *val1 = qu.pop();
-	// // if (val1 == nullptr) {
-	// // 	printf("TRUE\n");
-	// // }
-	// // double *val = qu.topKey();
-	// // printf("Top Key: [%.1f, %.1f]\n", val[0], val[1]);
-	// // delete[] val;
-	// // val = NULL;
-
-	// vector<vertex*> verts;
-	// vertex a, b, c, d, e;
-	// verts.push_back(&a);
-	// verts.push_back(&b);
-	// verts.push_back(&c);
-	// verts.push_back(&d);
-	// verts.push_back(&e);
-	// for (int i = 0; i < 5; i++) {
-	// 	vertex *v = verts[i];
-	// 	v->row=i;
-	// 	v->col=i;
-	// 	v->h=0;
-	// 	v->g=0;
-	// 	v->rhs=0;
-	// 	v->type='0';
-	// 	v->status='0';
-	// 	v->key[0]= i;
-	// 	v->key[1]= 0;
-	// 	v->print();
-	// 	// verts.push_back(a);
-	// }
-
-	// verts[1]->key[1] = 2;
-	// verts[4]->key[1] = 2;
-
-	// double myKey[2] = {5, 5};
-	// double myKey1[2] = {0, 2};
-
-	// for (int i = 0; i < 4; i++) {
-	// 	// qu.push(verts[i]);
-	// 	qu.insert(verts[i], myKey);
-	// }
-
-	// qu.insert(verts[4], myKey1);
-
-	// qu.remove(verts[4]);
-
-	// qu.printHeap();
-
-	// qu.clear();
-
-	// qu.printHeap();
-
-	// // vertex *val = qu.pop();
-	// // printf("Popped:\n");
-	// // val->print();
-
-	// // qu.printHeap();
-
-	// // val = qu.topKey();
-	// // printf("Top Key: [%.1f, %.1f]\n", val[0], val[1]);
-	// // delete[] val;
-	// // val = NULL;
-
-	
-	
-
 
 		
 	worldBoundary = grid_world.getWorldBoundary();
@@ -422,6 +368,7 @@ void runSimulation(char *fileName){
 
                 case 1001:  //ENTER KEY
                 // printf("Hit ENTER\n");
+                // 		printf("Hit Benter\n");
 
 
                          //calc shortest path

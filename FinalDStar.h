@@ -20,7 +20,7 @@ public:
 	void init(GridWorld &gWorld);
 	// updateVertex
 	void updateVertex(vertex &v);
-	void computeShortestPath();
+	bool computeShortestPath();
 	void search(GridWorld &gWorld);
 	
 	// My helper functions
