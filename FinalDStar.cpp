@@ -60,9 +60,10 @@ void FinalDStar::init(GridWorld &gWorld) {
 }
 
 void FinalDStar::updateVertex(vertex &v) {
-	debug("UPDATING VERTEX (%d, %d) t= %d", v.col, v.row, v.type);
+	debug("UPDATING VERTEX");
+	v.print();
 	double newRHS = INF;
-	if (!isGoal(v)) {
+	if (notGoal(v)) {
 		for (int i = 0; i < DIRECTIONS; i++) {
 			int x = v.col + neighbours[i].x;
 			int y = v.row + neighbours[i].y;
@@ -76,8 +77,9 @@ void FinalDStar::updateVertex(vertex &v) {
 				}
 			}
 		}
+		v.rhs = newRHS;
 	}
-	v.rhs = newRHS;
+	
 	// debug("newRHS = %f", newRHS);
 
 	if (mQ.contains(&v)) {
@@ -125,7 +127,7 @@ void FinalDStar::computeShortestPath() {
 	// debug("comparing [%f, %f] with [%f, %f]", k1[0], k1[1], k2[0], k2[1]);
 	// debug("!locallyConsistent? %d, %f, %f", !locallyConsistant(maze[startCoord.y][startCoord.x]), maze[startCoord.y][startCoord.x].g, maze[startCoord.y][startCoord.x].rhs);
 
-	if (compareKeys(mQ.getTopKey(), calculateStartKey()) || !locallyConsistant(maze[startCoord.y][startCoord.x])) {
+	while (compareKeys(mQ.getTopKey(), calculateStartKey()) || !locallyConsistant(maze[startCoord.y][startCoord.x])) {
 		double *tKey = mQ.getTopKey();
 		k_old[0] = tKey[0];
 		k_old[1] = tKey[1];
@@ -141,8 +143,8 @@ void FinalDStar::computeShortestPath() {
 		} else if (u->g > u->rhs) {
 			// debug("TRUE g=%f rhs=%f", u->g, u->rhs);
 			u->g = u->rhs;
-			// debug("New rhs");
-			// u->print();
+			debug("VERTEX");
+			u->print();
 			for (int i = 0; i < DIRECTIONS; i++) {
 				int x = u->col + neighbours[i].x;
 				int y = u->row + neighbours[i].y;
@@ -164,6 +166,7 @@ void FinalDStar::computeShortestPath() {
 	}
 
 	// debug("maze[6][2] t=%d, notBlocked=%d", maze[6][2].type, notBlocked(maze[6][2]));
+	debug("Goal? maze[5][3] %d, notgoal %d", isGoal(maze[5][3]), notGoal(maze[5][3]));
 }
 
 double FinalDStar::calculateH(int x, int y) {

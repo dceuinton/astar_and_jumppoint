@@ -314,6 +314,10 @@ void runSimulation(char *fileName){
 	// mFinalDStar->printPQ();
 	// mFinalDStar->updateVertex(*(mFinalDStar->getVertex(goal.col - 1, goal.row - 1)));
 	mFinalDStar->printPQ();
+	// int iterations = 4;
+	// for (int i = 0; i < iterations; i++) {
+	// 	mFinalDStar->computeShortestPath();	
+	// }	
 	mFinalDStar->computeShortestPath();
 	mFinalDStar->printMaze();
 	mFinalDStar->printPQ();
