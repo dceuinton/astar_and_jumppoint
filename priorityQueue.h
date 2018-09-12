@@ -20,7 +20,7 @@ public:
 	double* topKey();
 	double* getTopKey();
 	void insert(vertex *v, double *k);
-	void insert(vertex* v, double k[2]);
+	// void insert(vertex* v, double k[2]);
 	void insert(vertex *v);
 	void update(vertex *v, double *k);
 	void remove(vertex *v);

@@ -310,10 +310,13 @@ void runSimulation(char *fileName){
 	FinalDStar *mFinalDStar = new FinalDStar(grid_world.getGridWorldRows(), grid_world.getGridWorldCols(), HEURISTIC);
 	// mFinalDStar->init(start.col, start.row, goal.col, goal.row);
 	mFinalDStar->init(grid_world);
-	mFinalDStar->printMaze();
+	// mFinalDStar->printMaze();
 	// mFinalDStar->printPQ();
-	mFinalDStar->updateVertex(*(mFinalDStar->getVertex(goal.col - 1, goal.row - 1)));
+	// mFinalDStar->updateVertex(*(mFinalDStar->getVertex(goal.col - 1, goal.row - 1)));
+	mFinalDStar->printPQ();
+	mFinalDStar->computeShortestPath();
 	mFinalDStar->printMaze();
+	mFinalDStar->printPQ();
 
 	
 	//----------------------------------------------------------------

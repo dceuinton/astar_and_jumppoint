@@ -60,25 +60,25 @@ void FinalDStar::init(GridWorld &gWorld) {
 }
 
 void FinalDStar::updateVertex(vertex &v) {
-	debug("updateVertex()");
+	debug("UPDATING VERTEX (%d, %d) t= %d", v.col, v.row, v.type);
 	double newRHS = INF;
 	if (!isGoal(v)) {
 		for (int i = 0; i < DIRECTIONS; i++) {
 			int x = v.col + neighbours[i].x;
 			int y = v.row + neighbours[i].y;
-			debug("The type of maze[%d][%d] is: %d", y, x, maze[y][x].type);
+			// debug("UV - Vertex (%d, %d), type %d", x, y, maze[y][x].type);
 			if (notBlocked(maze[y][x])) {
-				debug("vertex(%d, %d) gets here", x, y);
+				// debug("vertex(%d, %d) gets here", x, y);
 				double rhs = maze[y][x].g + cost(v, maze[y][x]);
-				debug("rhs = %f", rhs);
+				// debug("(%d, %d) rhs = %f", x, y, rhs);
 				if (rhs < newRHS) {
 					newRHS = rhs;
 				}
 			}
 		}
 	}
-	// v.rhs = newRHS;
-	debug("newRHS = %f", newRHS);
+	v.rhs = newRHS;
+	// debug("newRHS = %f", newRHS);
 
 	if (mQ.contains(&v)) {
 		mQ.remove(&v);
@@ -89,36 +89,82 @@ void FinalDStar::updateVertex(vertex &v) {
 	}
 }
 
-// void FinalDStar::computeShortestPath() {
-// 	while (compareKeys(mQ.getTopKey(), calculateStartKey()) || !locallyConsistant(maze[startCoord.y][startCoord.x])) {
-// 		double *tKey = mQ.getTopKey();
-// 		k_old[0] = tKey[0];
-// 		k_old[1] = tKey[1];
-// 		vertex u = *(mQ.pop());
+void FinalDStar::computeShortestPath() {
+	// while (compareKeys(mQ.getTopKey(), calculateStartKey()) || !locallyConsistant(maze[startCoord.y][startCoord.x])) {
+	// 	double *tKey = mQ.getTopKey();
+	// 	k_old[0] = tKey[0];
+	// 	k_old[1] = tKey[1];
+	// 	vertex u = *(mQ.pop());
 
-// 		double uKey[2];
-// 		calcKey(u, uKey);
+	// 	double uKey[2];
+	// 	calcKey(u, uKey);
 
-// 		if (compareKeys(k_old, uKey)) {
-// 			mQ.insert(&u, uKey);
-// 		} else if (u.g > u.rhs) {
-// 			u.g = u.rhs;
-// 			for (int i = 0; i < DIRECTIONS; i++) {
-// 				int x = u.col + neighbours[i].x;
-// 				int y = u.row + neighbours[i].y;
-// 				updateVertex(maze[y][x]);
-// 			}
-// 		} else {
-// 			u.g = INF;
-// 			updateVertex(u);
-// 			for (int i = 0; i < DIRECTIONS + 1; i++) {
-// 				int x = u.col + allNine[i].x;
-// 				int y = u.row + allNine[i].y;
-// 				updateVertex(maze[y][x]);
-// 			}
-// 		}
-// 	}
-// }
+	// 	if (compareKeys(k_old, &uKey[0])) {
+	// 		mQ.insert(&u, &uKey[0]);
+	// 	} else if (u.g > u.rhs) {
+	// 		u.g = u.rhs;
+	// 		for (int i = 0; i < DIRECTIONS; i++) {
+	// 			int x = u.col + neighbours[i].x;
+	// 			int y = u.row + neighbours[i].y;
+	// 			updateVertex(maze[y][x]);
+	// 		}
+	// 	} else {
+	// 		u.g = INF;
+	// 		updateVertex(u);
+	// 		for (int i = 0; i < DIRECTIONS + 1; i++) {
+	// 			int x = u.col + allNine[i].x;
+	// 			int y = u.row + allNine[i].y;
+	// 			updateVertex(maze[y][x]);
+	// 		}
+	// 	}
+	// }
+
+	// // My checks --------------------------------------------------
+	// double *k1 = mQ.getTopKey();
+	// double *k2 = calculateStartKey();
+	// debug("comparing [%f, %f] with [%f, %f]", k1[0], k1[1], k2[0], k2[1]);
+	// debug("!locallyConsistent? %d, %f, %f", !locallyConsistant(maze[startCoord.y][startCoord.x]), maze[startCoord.y][startCoord.x].g, maze[startCoord.y][startCoord.x].rhs);
+
+	if (compareKeys(mQ.getTopKey(), calculateStartKey()) || !locallyConsistant(maze[startCoord.y][startCoord.x])) {
+		double *tKey = mQ.getTopKey();
+		k_old[0] = tKey[0];
+		k_old[1] = tKey[1];
+		vertex* u = mQ.pop();
+
+		double uKey[2];
+		calcKey(*u, uKey);
+		// debug("k_old [%f, %f]", k_old[0], k_old[1]);
+		// debug("uKey [%f, %f]", uKey[0], uKey[1]);
+
+		if (compareKeys(k_old, &uKey[0])) {
+			mQ.insert(u, &uKey[0]);
+		} else if (u->g > u->rhs) {
+			// debug("TRUE g=%f rhs=%f", u->g, u->rhs);
+			u->g = u->rhs;
+			// debug("New rhs");
+			// u->print();
+			for (int i = 0; i < DIRECTIONS; i++) {
+				int x = u->col + neighbours[i].x;
+				int y = u->row + neighbours[i].y;
+				// debug("Next vertex to be updated (%d, %d)", x, y);
+				if (notBlocked(maze[y][x])) {
+					updateVertex(maze[y][x]);	
+				}				
+			}
+		} else {
+			u->g = INF;
+			for (int i = 0; i < DIRECTIONS + 1; i++) {
+				int x = u->col + allNine[i].x;
+				int y = u->row + allNine[i].y;
+				if (notBlocked(maze[y][x])) {
+					updateVertex(maze[y][x]);	
+				}		
+			}
+		}
+	}
+
+	// debug("maze[6][2] t=%d, notBlocked=%d", maze[6][2].type, notBlocked(maze[6][2]));
+}
 
 double FinalDStar::calculateH(int x, int y) {
 	if (HEURISTIC == MANHATTAN) {  
@@ -201,7 +247,7 @@ bool FinalDStar::compareKeys(double* lhs, double* rhs) {
 	} else if (lhs[0] > rhs[0]) {
 		return false;
 	} else {
-		if (lhs[1] <= rhs[1]) {
+		if (lhs[1] < rhs[1]) {
 			return true;
 		} else {
 			return false;

@@ -46,7 +46,9 @@ double* PriorityQueue::getTopKey() {
 		mTopKey[0] = INF;
 		mTopKey[1] = INF;
 	}
-	return mTopKey;
+
+	// printf("getTopKey [%f, %f]\n", mTopKey[0], mTopKey[1]);
+	return &mTopKey[0];
 }
 
 void PriorityQueue::insert(vertex* v, double *k) {
