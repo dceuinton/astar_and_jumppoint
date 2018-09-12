@@ -745,8 +745,8 @@ int main(int argc, char *argv[]) {
 	//initgraph(&graphDriver, &graphMode, "", 1440, 900); // Start Window
  	//initgraph(&graphDriver, &graphMode, "", 1280, 1024); // Start Window
 	
-   // initgraph(&graphDriver, &graphMode, "", 1360, 768); // Start Window - LAPTOP SCREEN
-	initgraph(&graphDriver, &graphMode, "", 1920, 1080); // Start Window - Full-HD
+   initgraph(&graphDriver, &graphMode, "", 1360, 768); // Start Window - LAPTOP SCREEN
+	// initgraph(&graphDriver, &graphMode, "", 1920, 1080); // Start Window - Full-HD
 	
    BACKGROUND_COLOUR = WHITE;
    LINE_COLOUR = GREEN;

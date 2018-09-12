@@ -42,6 +42,13 @@ void FinalDStar::init(int startX, int startY, int goalX, int goalY) {
 			maze[i][j].rhs = INF;
 			maze[i][j].key[0] = 0;
 			maze[i][j].key[1] = 0;
+
+			if (isStart(maze[i][j])) {
+				s_start = &maze[i][j];
+			}
+			if (isGoal(maze[i][j])) {
+				s_goal = &maze[i][j];
+			}
 		}
 	}
 
@@ -126,7 +133,8 @@ void FinalDStar::computeShortestPath() {
 		}
 	}
 
-	printMaze();
+	// printMaze();
+	// printPQ();
 	// // debug("maze[6][2] t=%d, notBlocked=%d", maze[6][2].type, notBlocked(maze[6][2]));
 	// debug("Goal? maze[5][3] %d, notgoal %d", isGoal(maze[5][3]), notGoal(maze[5][3]));
 }
@@ -137,31 +145,61 @@ void FinalDStar::search(GridWorld &gWorld) {
 
 	debug("s_start");
 	s_start->print();
+	debug("s_goal");
+	s_goal->print();
 
 	s_last = getStartVertex();
 	computeShortestPath();
 
-	while (notGoal(*s_start)) {
-		int lowest_cost = INF;
-		vertex* next = s_start;
-		for (int i = 0; i < DIRECTIONS; i++) {
-			int x = s_start->col + neighbours[i].x;
-			int y = s_start->row + neighbours[i].y;
-			if (notBlocked(maze[y][x])) {
-				double m_cost = cost(*s_start, maze[y][x]) + maze[y][x].g;
-				// debug("Checking (%d, %d) m_cost = %f", x, y, m_cost);
-				if (m_cost < lowest_cost) {
-					// debug("This is lower (%d, %d) m_cost = %f", x, y, m_cost);
-					lowest_cost = m_cost;
-					next = &maze[y][x];
-					// next->print();
+	// int iteration = 4;
+
+	// for (int i = 0; i < iteration; i++) {
+	// 	debug("ITERATION %d", i);
+
+		while (notGoal(*s_start)) {
+			int lowest_cost = INF;
+			vertex* next = s_start;
+			for (int i = 0; i < DIRECTIONS; i++) {
+				int x = s_start->col + neighbours[i].x;
+				int y = s_start->row + neighbours[i].y;
+				if (notBlocked(maze[y][x])) {
+					double m_cost = cost(*s_start, maze[y][x]) + maze[y][x].g;
+					// debug("Checking (%d, %d) m_cost = %f", x, y, m_cost);
+					if (m_cost < lowest_cost) {
+						// debug("This is lower (%d, %d) m_cost = %f", x, y, m_cost);
+						lowest_cost = m_cost;
+						next = &maze[y][x];
+						// next->print();
+					}
+				}
+			}
+			s_start = next;
+			// debug("start");
+			// s_start->print();
+
+			for (int i = 0; i < DIRECTIONS; i++) {
+				int x = s_start->col + neighbours[i].x;
+				int y = s_start->row + neighbours[i].y;
+				if (isHidden(maze[y][x])) {
+					debug("HIDDEN TRIGGERED (%d, %d)", x, y);
+					block(maze[y][x]);
+					km = km + cost(*s_last, *s_start);
+					s_last = s_start;
+
+					for (int i = 0; i < DIRECTIONS; i++) {
+						int x = s_start->col + neighbours[i].x;
+						int y = s_start->row + neighbours[i].y;
+						if (notBlocked(maze[y][x])) {
+							updateVertex(maze[y][x]);
+						}
+					}
+					computeShortestPath();
 				}
 			}
 		}
-		s_start = next;
-		// debug("start");
-		// s_start->print();
-	}
+	// }
+
+	
 	
 
 
@@ -222,7 +260,9 @@ double FinalDStar::calculateK2(vertex &v) {
 
 double FinalDStar::calculateK1(vertex &v) {
 	double retVal = calculateK2(v);
-	retVal += v.h; 
+	// debug("s_start");
+	// s_start->print();
+	retVal += cost(v, *s_start); 
 	retVal += km;
 	return retVal;
 }
@@ -281,6 +321,21 @@ bool FinalDStar::notBlocked(vertex &v) {
 		return false;
 	}
 	return true;
+}
+
+bool FinalDStar::isHidden(vertex &v) {
+	if ((v.type == '9') || (v.type == 57)) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+void FinalDStar::block(vertex &v) {
+	v.type = '1';
+	v.h = INF;
+	v.g = INF;
+	v.rhs = INF;
 }
 
 void FinalDStar::insertToQ(vertex &v) {

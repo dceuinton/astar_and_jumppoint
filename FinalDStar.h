@@ -48,6 +48,7 @@ private:
 	Coordinates goalCoord;
 	vertex* s_last;
 	vertex* s_start;
+	vertex* s_goal;
 
 	double calculateH(int x, int y);
 	double calculateK2(vertex &v);
@@ -64,6 +65,8 @@ private:
 	bool locallyConsistant(vertex &v);
 	void insertToQ(vertex &v);
 	bool compareKeys(double* lhs, double* rhs);
+	bool isHidden(vertex &v);
+	void block(vertex &v);
 
 	double manhattan(int x1, int y1, int x2, int y2);
 	double euclidean(int x1, int y1, int x2, int y2);
