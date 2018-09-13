@@ -362,16 +362,30 @@ void runSimulation(char *fileName){
 			     grid_world.displayMap();
 			 
 			 switch(action){
-			 	case 1000:
+			 	case 1000: // Space
+
+			 	grid_world.initSystemOfCoordinates();
+			 	grid_world.loadMapAndDisplay(filename);
+			 	grid_world.initialiseMapConnections();
+
+			 	// FinalDStar *mFinal
+
+
 
 			 	          break;
 
                 case 1001:  //ENTER KEY
-                // printf("Hit ENTER\n");
-                // 		printf("Hit Benter\n");
+
+    //             found = mFinalDStar->computeShortestPath();
+
+				// if (found) {
+				// 	copyMazeToDisplayMap(grid_world, mFinalDStar);
+				// 	grid_world.displayPath();
+				// }
 
 
                          //calc shortest path
+
 
 
                          break;  

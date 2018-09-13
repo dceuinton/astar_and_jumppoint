@@ -119,7 +119,6 @@ bool FinalDStar::computeShortestPath() {
 				int y = u->row + neighbours[i].y;
 				if (notBlocked(maze[y][x])) {
 					updateVertex(maze[y][x]);	
-					// u->linkCost[i] = cost(*u, maze[y][x]);
 				} 				
 			}
 		} else {
