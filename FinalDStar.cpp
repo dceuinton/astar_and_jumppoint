@@ -315,32 +315,32 @@ bool FinalDStar::compareKeys(double* lhs, double* rhs) {
 	}
 }
 
-bool FinalDStar::isGoal(vertex &v) {
+bool isGoal(vertex &v) {
 	if ((v.type == '7') || (v.type == 55)) {
 		return true;
 	}
 	return false;
 }
 
-bool FinalDStar::notGoal(vertex &v) {
+bool notGoal(vertex &v) {
 	return !isGoal(v);
 }
 
-bool FinalDStar::isStart(vertex &v) {
+bool isStart(vertex &v) {
 	if (v.type == '6' || v.type == 54) {
 		return true;
 	}
 	return false;
 }
 
-bool FinalDStar::notBlocked(vertex &v) {
+bool notBlocked(vertex &v) {
 	if ((v.type == '1') || (v.type == 49)) {
 		return false;
 	}
 	return true;
 }
 
-bool FinalDStar::isHidden(vertex &v) {
+bool isHidden(vertex &v) {
 	if ((v.type == '9') || (v.type == 57)) {
 		return true;
 	} else {
@@ -348,7 +348,15 @@ bool FinalDStar::isHidden(vertex &v) {
 	}
 }
 
-void FinalDStar::block(vertex &v) {
+bool locallyConsistant(vertex &v) {
+	if (v.g == v.rhs) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+void block(vertex &v) {
 	v.type = '1';
 	v.h = INF;
 	v.g = INF;
@@ -360,7 +368,7 @@ void FinalDStar::insertToQ(vertex &v) {
 	mQ.insert(&v);
 }
 
-double FinalDStar::cost(vertex &start, vertex &finish) {
+double cost(vertex &start, vertex &finish) {
 	if        (HEURISTIC == MANHATTAN) {
 		return manhattan(start.col, start.row, finish.col, finish.row);
 	} else if (HEURISTIC == EUCLIDEAN) {
@@ -371,19 +379,11 @@ double FinalDStar::cost(vertex &start, vertex &finish) {
 	}
 }
 
-bool FinalDStar::locallyConsistant(vertex &v) {
-	if (v.g == v.rhs) {
-		return true;
-	} else {
-		return false;
-	}
-}
-
-double FinalDStar::manhattan(int x1, int y1, int x2, int y2) {
+double manhattan(int x1, int y1, int x2, int y2) {
 	return max(abs(x1 - x2), abs(y1 - y2));
 }
 
-double FinalDStar::euclidean(int x1, int y1, int x2, int y2) {
+double euclidean(int x1, int y1, int x2, int y2) {
 	int a = abs(x1 - x2);
 	int b = abs(y1 - y2);
 	return sqrt(a * a + b * b);

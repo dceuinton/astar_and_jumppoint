@@ -40,13 +40,16 @@ public:
 	vertex* s_last;
 	vertex* s_start;
 	vertex* s_goal;
+	double km;
+
+	vector<vector<vertex>> maze;
 
 private:
 	int rows, cols;
-	vector<vector<vertex>> maze;
+	
 	PriorityQueue mQ;
 
-	double km;
+	
 	double k_old[2];
 	double mStartKey[2];
 
@@ -62,19 +65,23 @@ private:
 	void calcKey(vertex &v, double *container);
 	double* calculateStartKey();
 	void setKey(vertex &v);
-	bool isGoal(vertex &v);
-	bool notGoal(vertex &v);
-	bool isStart(vertex &v);
-	bool notBlocked(vertex &v);
-	double cost(vertex &start, vertex &finish);
-	bool locallyConsistant(vertex &v);
+	
 	void insertToQ(vertex &v);
 	bool compareKeys(double* lhs, double* rhs);
-	bool isHidden(vertex &v);
-	void block(vertex &v);
+	
 
-	double manhattan(int x1, int y1, int x2, int y2);
-	double euclidean(int x1, int y1, int x2, int y2);
+	
 };
+
+bool isGoal(vertex &v);
+bool notGoal(vertex &v);
+bool isStart(vertex &v);
+bool notBlocked(vertex &v);
+bool locallyConsistant(vertex &v);
+bool isHidden(vertex &v);
+double cost(vertex &start, vertex &finish);
+double manhattan(int x1, int y1, int x2, int y2);
+double euclidean(int x1, int y1, int x2, int y2);
+void block(vertex &v);
 
 #endif

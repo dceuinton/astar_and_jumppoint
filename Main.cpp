@@ -389,6 +389,54 @@ void runSimulation(char *fileName){
 			 	          break;
 
                 case 1001:  //ENTER KEY
+                	// printf("ENTER\n");
+
+                	if (notGoal(*(mFinalDStar->s_start))) {
+                		int lowest_cost = INF;
+                		vertex* next = mFinalDStar->s_start;
+						for (int i = 0; i < DIRECTIONS; i++) {
+							int x = mFinalDStar->s_start->col + neighbours[i].x;
+							int y = mFinalDStar->s_start->row + neighbours[i].y;
+							if (notBlocked(mFinalDStar->maze[y][x])) {
+								double m_cost = cost(*(mFinalDStar->s_start), mFinalDStar->maze[y][x]) + mFinalDStar->maze[y][x].g;
+								// debug("Checking (%d, %d) m_cost = %f", x, y, m_cost);
+								if (m_cost < lowest_cost) {
+									// debug("This is lower (%d, %d) m_cost = %f", x, y, m_cost);
+									lowest_cost = m_cost;
+									next = &mFinalDStar->maze[y][x];
+								}
+							}
+						}
+						mFinalDStar->s_start = next;
+                	}
+
+                	// Move to s_start
+
+                	for (int i = 0; i < DIRECTIONS; i++) {
+                		int x = mFinalDStar->s_start->col + neighbours[i].x;
+						int y = mFinalDStar->s_start->row + neighbours[i].y;
+						if (isHidden(mFinalDStar->maze[y][x])) {
+							block(mFinalDStar->maze[y][x]);
+							mFinalDStar->km = mFinalDStar->km + cost(*(mFinalDStar->s_last), *(mFinalDStar->s_start));
+							mFinalDStar->s_last = mFinalDStar->s_start;
+
+							// Update edge costs and vertices.
+							for (int i = 0; i < DIRECTIONS; i++) {
+								int c = x + neighbours[i].x;
+								int r = y + neighbours[i].y;
+								if (notBlocked(mFinalDStar->maze[r][c])) {
+									mFinalDStar->updateVertex(mFinalDStar->maze[r][c]);
+								}
+							}
+							mFinalDStar->computeShortestPath();
+						}
+                	}
+
+
+
+                	action = -1;
+                	delay(300);
+
 
     //             found = mFinalDStar->computeShortestPath();
 
