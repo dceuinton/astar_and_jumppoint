@@ -326,6 +326,15 @@ bool notGoal(vertex &v) {
 	return !isGoal(v);
 }
 
+// bool notReachedGoal(vertex &v) {
+// 	if (v.row == goalCoord.y) {
+// 		if (v.col == goalCoord.x) {
+// 			return false;
+// 		}
+// 	}
+// 	return true;
+// }
+
 bool isStart(vertex &v) {
 	if (v.type == '6' || v.type == 54) {
 		return true;

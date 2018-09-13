@@ -75,6 +75,7 @@ private:
 
 bool isGoal(vertex &v);
 bool notGoal(vertex &v);
+// bool notReachedGoal(vertex &v);
 bool isStart(vertex &v);
 bool notBlocked(vertex &v);
 bool locallyConsistant(vertex &v);

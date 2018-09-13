@@ -179,6 +179,21 @@ void drawInformationPanel(int x, int y, char* info){
 	///////////////////////////////////////////////////////////////////////////////////////////
 }
 
+void moveStart(vertex* from, vertex* to) {
+	if (from->type == '6' || from->type == 54) {
+		if (to->type == '0' || to->type == 48) {
+			from->type = '0';
+			to->type = '6';
+		} else if (to->type == '7' || to->type == 55) {
+			printf("FINISHED!\n");
+		} else {
+			printf("ERROR: moveStart(from, to) to is not clear.\n");
+		}
+	} else {
+		printf("ERROR: moveStart(from, to) Not the start vertex.\n");
+	}
+}
+
 int getKey(){
 	
 	 if(GetAsyncKeyState(VK_UP) < 0) { //UP ARROW
@@ -339,9 +354,13 @@ void runSimulation(char *fileName){
 	// }
 	// mFinalDStar->search(grid_world);
 
+	grid_world.initSystemOfCoordinates();
+ 	grid_world.loadMapAndDisplay(fileName);
+ 	grid_world.initialiseMapConnections();
 	
 	FinalDStar *mFinalDStar = new FinalDStar(HEURISTIC);
 	bool pathFound = false;
+	bool initialized = false;
 	
 	//setvisualpage(page);
 	
@@ -360,6 +379,7 @@ void runSimulation(char *fileName){
 			 switch(action){
 			 	case 1000: // Space
 
+			 	initialized = false;
 			 	grid_world.initSystemOfCoordinates();
 			 	grid_world.loadMapAndDisplay(fileName);
 			 	grid_world.initialiseMapConnections();
@@ -384,6 +404,8 @@ void runSimulation(char *fileName){
 			 	} else {
 			 		printf("INFORMATION :: No finite cost path\n");
 			 	}
+
+			 	initialized = true;
 			 	action = -1;
 			 	delay(200);
 			 	          break;
@@ -391,51 +413,66 @@ void runSimulation(char *fileName){
                 case 1001:  //ENTER KEY
                 	// printf("ENTER\n");
 
-                	if (notGoal(*(mFinalDStar->s_start))) {
-                		int lowest_cost = INF;
-                		vertex* next = mFinalDStar->s_start;
-						for (int i = 0; i < DIRECTIONS; i++) {
-							int x = mFinalDStar->s_start->col + neighbours[i].x;
-							int y = mFinalDStar->s_start->row + neighbours[i].y;
-							if (notBlocked(mFinalDStar->maze[y][x])) {
-								double m_cost = cost(*(mFinalDStar->s_start), mFinalDStar->maze[y][x]) + mFinalDStar->maze[y][x].g;
-								// debug("Checking (%d, %d) m_cost = %f", x, y, m_cost);
-								if (m_cost < lowest_cost) {
-									// debug("This is lower (%d, %d) m_cost = %f", x, y, m_cost);
-									lowest_cost = m_cost;
-									next = &mFinalDStar->maze[y][x];
-								}
-							}
-						}
-						mFinalDStar->s_start = next;
-                	}
-
-                	// Move to s_start
-
-                	for (int i = 0; i < DIRECTIONS; i++) {
-                		int x = mFinalDStar->s_start->col + neighbours[i].x;
-						int y = mFinalDStar->s_start->row + neighbours[i].y;
-						if (isHidden(mFinalDStar->maze[y][x])) {
-							block(mFinalDStar->maze[y][x]);
-							mFinalDStar->km = mFinalDStar->km + cost(*(mFinalDStar->s_last), *(mFinalDStar->s_start));
-							mFinalDStar->s_last = mFinalDStar->s_start;
-
-							// Update edge costs and vertices.
+                	if (initialized) {
+                		if (notGoal(*(mFinalDStar->s_start))) {
+	                		int lowest_cost = INF;
+	                		vertex* next = mFinalDStar->s_start;
 							for (int i = 0; i < DIRECTIONS; i++) {
-								int c = x + neighbours[i].x;
-								int r = y + neighbours[i].y;
-								if (notBlocked(mFinalDStar->maze[r][c])) {
-									mFinalDStar->updateVertex(mFinalDStar->maze[r][c]);
+								int x = mFinalDStar->s_start->col + neighbours[i].x;
+								int y = mFinalDStar->s_start->row + neighbours[i].y;
+								if (notBlocked(mFinalDStar->maze[y][x])) {
+									double m_cost = cost(*(mFinalDStar->s_start), mFinalDStar->maze[y][x]) + mFinalDStar->maze[y][x].g;
+									// debug("Checking (%d, %d) m_cost = %f", x, y, m_cost);
+									if (m_cost < lowest_cost) {
+										// debug("This is lower (%d, %d) m_cost = %f", x, y, m_cost);
+										lowest_cost = m_cost;
+										next = &mFinalDStar->maze[y][x];
+									}
 								}
 							}
-							mFinalDStar->computeShortestPath();
-						}
-                	}
+							moveStart(mFinalDStar->s_start, next);
+							mFinalDStar->s_start = next;
+							copyMazeToDisplayMap(grid_world, mFinalDStar);
+	                	}
+                	
+                	                	// // Move to s_start
+                	                	// mFinalDStar->maze[mFinalDStar->s_last->row][mFinalDStar->s_last->col].print();
+                	                	// mFinalDStar->s_start->print();
+                	                	// moveStart()
+
+                	
+                	      //           	for (int i = 0; i < DIRECTIONS; i++) {
+                	      //           		int x = mFinalDStar->s_start->col + neighbours[i].x;
+                							// int y = mFinalDStar->s_start->row + neighbours[i].y;
+                							// if (isHidden(mFinalDStar->maze[y][x])) {
+                							// 	block(mFinalDStar->maze[y][x]);
+                							// 	mFinalDStar->km = mFinalDStar->km + cost(*(mFinalDStar->s_last), *(mFinalDStar->s_start));
+                							// 	mFinalDStar->s_last = mFinalDStar->s_start;
+                	
+                							// 	// Update edge costs and vertices.
+                							// 	for (int i = 0; i < DIRECTIONS; i++) {
+                							// 		int c = x + neighbours[i].x;
+                							// 		int r = y + neighbours[i].y;
+                							// 		if (notBlocked(mFinalDStar->maze[r][c])) {
+                							// 			mFinalDStar->updateVertex(mFinalDStar->maze[r][c]);
+                							// 		}
+                							// 	}
+                							// 	mFinalDStar->computeShortestPath();
+                							// }
+                	      //           	}
+
+
+                	    }
+
+
+
+
+
 
 
 
                 	action = -1;
-                	delay(300);
+                	delay(1000);
 
 
     //             found = mFinalDStar->computeShortestPath();
@@ -469,7 +506,8 @@ void runSimulation(char *fileName){
 						break;
 				
 				case 106: 
-					  
+					// moveStart(mFinalDStar->s_start, &(mFinalDStar->maze[mFinalDStar->s_start->row + 1][mFinalDStar->s_start->col]));
+     //        	    copyMazeToDisplayMap(grid_world, mFinalDStar);
 					   //~ algorithmSelection = ASTAR_ALGORITHM;
 						break;
 				

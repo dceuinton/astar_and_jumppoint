@@ -156,10 +156,6 @@ struct vertex
 	}
 }; 
 
-// void moveStart(vertex* from, vertex* to) {
-// 	if ()
-// }
-
 extern int MAX_MOVES;
 
 extern vector<vector<vertex> > map;
