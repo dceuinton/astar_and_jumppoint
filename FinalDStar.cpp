@@ -14,9 +14,18 @@ void FinalDStar::debug(const char *format, ...) {
 	#endif
 }
 
-FinalDStar::FinalDStar(int rs, int cs, unsigned int theHeuristic) {
-	rows = rs; cols = cs;
+FinalDStar::FinalDStar(unsigned int theHeuristic) {
+	// rows = rs; cols = cs;
 	HEURISTIC = theHeuristic;
+
+	// maze.resize(rows);
+	// for (int i = 0; i < rows; i++) {
+	// 	maze[i].resize(cols);
+	// }
+}
+
+void FinalDStar::setSize(int rs, int cs) {
+	rows = rs; cols = cs;
 
 	maze.resize(rows);
 	for (int i = 0; i < rows; i++) {
@@ -99,7 +108,10 @@ void FinalDStar::updateVertex(vertex &v) {
 }
 
 bool FinalDStar::computeShortestPath() {
-	while (compareKeys(mQ.getTopKey(), calculateStartKey()) || !locallyConsistant(maze[startCoord.y][startCoord.x])) {
+
+
+	// while (compareKeys(mQ.getTopKey(), calculateStartKey()) || !locallyConsistant(maze[startCoord.y][startCoord.x])) {
+	while (compareKeys(mQ.getTopKey(), calculateStartKey()) || !locallyConsistant(*s_start)) {
 		double *tKey = mQ.getTopKey();
 		k_old[0] = tKey[0];
 		k_old[1] = tKey[1];
@@ -133,7 +145,11 @@ bool FinalDStar::computeShortestPath() {
 		}
 	}
 
-	return true;
+	if (s_start->g == INF) {
+		return false;
+	} else {
+		return true;	
+	}	
 	// printMaze();
 	// printPQ();
 	// // debug("maze[6][2] t=%d, notBlocked=%d", maze[6][2].type, notBlocked(maze[6][2]));

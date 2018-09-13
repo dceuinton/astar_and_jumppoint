@@ -303,49 +303,45 @@ void runSimulation(char *fileName){
 		
 	srand(time(NULL));  // Seed the random number generator
 			
-	//Initialise the world boundaries
-    grid_world.initSystemOfCoordinates();
-	grid_world.loadMapAndDisplay(fileName);
-	grid_world.initialiseMapConnections();
+	// //Initialise the world boundaries
+ //    grid_world.initSystemOfCoordinates();
+	// grid_world.loadMapAndDisplay(fileName);
+	// grid_world.initialiseMapConnections();
 	
 	//----------------------------------------------------------------
-	//LPA*
-	lpa_star = new LpaStar(grid_world.getGridWorldRows(), grid_world.getGridWorldCols());
-	vertex start = grid_world.getStartVertex();
-	vertex goal = grid_world.getGoalVertex();
+	// //LPA*
+	// lpa_star = new LpaStar(grid_world.getGridWorldRows(), grid_world.getGridWorldCols());
+	// vertex start = grid_world.getStartVertex();
+	// vertex goal = grid_world.getGoalVertex();
 	
-	cout << "(start.col = " << start.col << ", start.row = " << start.row << ")" << endl;
-	cout << "(goal.col = " << goal.col << ", goal.row = " << goal.row << ")" << endl;
+	// cout << "(start.col = " << start.col << ", start.row = " << start.row << ")" << endl;
+	// cout << "(goal.col = " << goal.col << ", goal.row = " << goal.row << ")" << endl;
 	
-	lpa_star->initialise(start.col, start.row, goal.col, goal.row);
+	// lpa_star->initialise(start.col, start.row, goal.col, goal.row);
 	
 	//lpa_star->copyMazeToDisplayMap(grid_world);
 	//copyMazeToDisplayMap(grid_world, lpa_star);
-	copyDisplayMapToMaze(grid_world, lpa_star);
+	// copyDisplayMapToMaze(grid_world, lpa_star);
 
-	FinalDStar *mFinalDStar = new FinalDStar(grid_world.getGridWorldRows(), grid_world.getGridWorldCols(), HEURISTIC);
+	// // FinalDStar *mFinalDStar = new FinalDStar(grid_world.getGridWorldRows(), grid_world.getGridWorldCols(), HEURISTIC);
 	
-	bool found = false;
+	// bool found = false;
 
 
-	mFinalDStar->init(grid_world);
-	found = mFinalDStar->computeShortestPath();
+	// mFinalDStar->init(grid_world);
+	// found = mFinalDStar->computeShortestPath();
 
-	printf("Found? %d\n", found);
+	// printf("Found? %d\n", found);
 
-	if (found) {
-		copyMazeToDisplayMap(grid_world, mFinalDStar);
-		grid_world.displayPath();
-	}
+	// if (found) {
+	// 	copyMazeToDisplayMap(grid_world, mFinalDStar);
+	// 	grid_world.displayPath();
+	// }
 	// mFinalDStar->search(grid_world);
 
 	
-
-		
-	worldBoundary = grid_world.getWorldBoundary();
-	deviceBoundary = grid_world.getDeviceBoundary();
-	GRIDWORLD_ROWS = grid_world.getGridWorldRows();
-	GRIDWORLD_COLS = grid_world.getGridWorldCols();
+	FinalDStar *mFinalDStar = new FinalDStar(HEURISTIC);
+	bool pathFound = false;
 	
 	//setvisualpage(page);
 	
@@ -365,13 +361,31 @@ void runSimulation(char *fileName){
 			 	case 1000: // Space
 
 			 	grid_world.initSystemOfCoordinates();
-			 	grid_world.loadMapAndDisplay(filename);
+			 	grid_world.loadMapAndDisplay(fileName);
 			 	grid_world.initialiseMapConnections();
 
-			 	// FinalDStar *mFinal
+			 	worldBoundary = grid_world.getWorldBoundary();
+				deviceBoundary = grid_world.getDeviceBoundary();
+				GRIDWORLD_ROWS = grid_world.getGridWorldRows();
+				GRIDWORLD_COLS = grid_world.getGridWorldCols();
 
+			 	// FinalDStar *mFinalDStar = new FinalDStar(grid_world.getGridWorldRows(), grid_world.getGridWorldCols(), HEURISTIC);
+			 	mFinalDStar->setSize(grid_world.getGridWorldRows(), grid_world.getGridWorldCols());
+			 	mFinalDStar->init(grid_world);
 
+			 	mFinalDStar->s_start = mFinalDStar->getStartVertex();
+			 	mFinalDStar->s_last  = mFinalDStar->getStartVertex();
+			 	mFinalDStar->s_goal  = mFinalDStar->getGoalVertex();
 
+			 	pathFound = mFinalDStar->computeShortestPath();
+
+			 	if (pathFound) {
+			 		copyMazeToDisplayMap(grid_world, mFinalDStar);
+			 	} else {
+			 		printf("INFORMATION :: No finite cost path\n");
+			 	}
+			 	action = -1;
+			 	delay(200);
 			 	          break;
 
                 case 1001:  //ENTER KEY

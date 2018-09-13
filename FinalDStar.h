@@ -14,7 +14,10 @@
 
 class FinalDStar {
 public:
-	FinalDStar(int rows, int cols, unsigned int theHeuristic);
+	// FinalDStar(int rows, int cols, unsigned int theHeuristic);
+	FinalDStar(unsigned int theHeuristic);
+
+	void setSize(int rs, int cs);
 
 	void init(int startX, int startY, int goalX, int goalY);
 	void init(GridWorld &gWorld);
@@ -34,6 +37,10 @@ public:
 	friend void copyMazeToDisplayMap(GridWorld &gWorld, FinalDStar *fds);
 	friend void copyDisplayMapToMaze(GridWorld &gWorld, FinalDStar *fds);
 
+	vertex* s_last;
+	vertex* s_start;
+	vertex* s_goal;
+
 private:
 	int rows, cols;
 	vector<vector<vertex>> maze;
@@ -46,9 +53,7 @@ private:
 	unsigned int HEURISTIC = 0; 
 	Coordinates startCoord;
 	Coordinates goalCoord;
-	vertex* s_last;
-	vertex* s_start;
-	vertex* s_goal;
+	
 
 	double calculateH(int x, int y);
 	double calculateK2(vertex &v);
